@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Test Writer</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app">
+    <aside class="sidebar">
+      <div class="brand">Claude Test Writer</div>
+
+      <section class="panel">
+        <label for="apiKey">API Key (Anthropic)</label>
+        <input id="apiKey" type="password" placeholder="sk-ant-..." autocomplete="off">
+        <div class="row">
+          <button id="saveKey" class="btn small">Salvar</button>
+          <span id="keyStatus" class="hint"></span>
+        </div>
+      </section>
+
+      <section class="panel">
+        <label for="model">Modelo</label>
+        <select id="model">
+          <option value="claude-sonnet-5" selected>Claude Sonnet 5</option>
+          <option value="claude-opus-5">Claude Opus 5</option>
+          <option value="claude-haiku-4-5">Claude Haiku 4.5</option>
+        </select>
+
+        <label for="effort">Custo (esforço de raciocínio)</label>
+        <select id="effort">
+          <option value="low" selected>Mínimo (mais barato)</option>
+          <option value="medium">Médio</option>
+          <option value="high">Alto (padrão da API)</option>
+        </select>
+        <div class="hint" id="effortHint">Ignorado no Haiku 4.5 (não suporta esse controle).</div>
+
+        <label for="framework">Framework de testes</label>
+        <select id="framework">
+          <option value="jest" selected>Jest</option>
+          <option value="vitest">Vitest</option>
+          <option value="jasmine">Jasmine / Angular TestBed</option>
+        </select>
+      </section>
+
+      <section class="panel">
+        <label for="mode">Modo</label>
+        <select id="mode">
+          <option value="folder" selected>Pasta local (grava .spec.ts direto)</option>
+          <option value="paste">Colar código (copiar manualmente)</option>
+        </select>
+      </section>
+
+      <section class="panel" id="folderPanel">
+        <button id="pickFolder" class="btn">Selecionar pasta do projeto</button>
+        <div id="folderName" class="hint"></div>
+        <div id="unsupported" class="warning" hidden>
+          Seu navegador não suporta a File System Access API. Use Chrome, Edge ou Opera.
+        </div>
+      </section>
+
+      <section class="panel files-panel" id="filesPanel">
+        <label>Arquivos .ts encontrados</label>
+        <div id="fileList" class="file-list"></div>
+      </section>
+
+      <section class="panel" id="pastePanel" hidden>
+        <label for="pasteFileName">Nome do arquivo original</label>
+        <input id="pasteFileName" type="text" placeholder="meu-arquivo.ts" value="meu-arquivo.ts">
+      </section>
+    </aside>
+
+    <main class="content">
+      <div class="content-header">
+        <span id="currentFile" class="current-file">Nenhum arquivo selecionado</span>
+        <button id="generateBtn" class="btn primary" disabled>Gerar testes</button>
+      </div>
+
+      <div class="panes">
+        <div class="pane">
+          <div class="pane-title">Fonte</div>
+          <textarea id="sourceArea" class="code" spellcheck="false" placeholder="Cole aqui o código .ts"></textarea>
+        </div>
+        <div class="pane">
+          <div class="pane-title">
+            Teste gerado (<span id="specName">-</span>)
+            <button id="copySpec" class="btn small copy-btn" hidden>Copiar</button>
+          </div>
+          <pre id="specPreview" class="code"></pre>
+        </div>
+      </div>
+
+      <div id="log" class="log"></div>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
